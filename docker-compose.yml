@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  auth-db:
+    image: postgres:15
+    container_name: auth-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: authdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_pgdata:/var/lib/postgresql/data
+
+  authservice-api:
+    build:
+      context: .
+      dockerfile: services/AuthService/Dockerfile
+    container_name: authservice-api
+    depends_on:
+      - auth-db
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=auth-db;Port=5432;Database=authdb;Username=admin;Password=admin123
+      - JwtSettings__Key=lucidmind-super-secret-key-123456789
+      - JwtSettings__Issuer=LucidMind.Auth
+      - JwtSettings__Audience=LucidMind.Users
+
+volumes:
+  auth_pgdata:
