@@ -72,7 +72,16 @@ services:
       - JwtSettings__Issuer=LucidMind.Auth
       - JwtSettings__Audience=LucidMind.Users
 
-
+  lucidmind-frontend:
+    build:
+      context: ./lucidmind-frontend
+      dockerfile: Dockerfile
+    container_name: lucidmind-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - authservice-api
+      - dreamservice-api
 volumes:
   auth_pgdata:
   dream_pgdata:
