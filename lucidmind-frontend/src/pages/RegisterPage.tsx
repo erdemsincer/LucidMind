@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../services/auth"; // API fonksiyonu
+import { register } from "../services/auth";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -17,45 +17,45 @@ export default function RegisterPage() {
     try {
       const result = await register(username, email, password);
       localStorage.setItem("token", result.token);
-      navigate("/"); // Kayıttan sonra anasayfaya yönlendir
-    } catch (err) {
+      navigate("/");
+    } catch {
       setError("Kayıt başarısız. E-posta kullanılıyor olabilir.");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh]">
-      <div className="w-full max-w-md bg-white shadow-md rounded px-8 py-6 border">
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Kayıt Ol</h2>
-        <form onSubmit={handleRegister} className="space-y-4">
+    <div className="flex flex-col items-center justify-center min-h-[70vh] bg-[#f4f1ea] text-[#5e4b3c]">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl px-8 py-6 border border-[#ccc]">
+        <h2 className="text-3xl font-bold mb-6 text-center">Kayıt Ol</h2>
+        <form onSubmit={handleRegister} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Kullanıcı Adı</label>
+            <label className="block text-sm font-medium mb-1">Kullanıcı Adı</label>
             <input
               type="text"
               required
-              className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[#ccc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8c7051] bg-white"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="erdem"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">E-posta</label>
+            <label className="block text-sm font-medium mb-1">E-posta</label>
             <input
               type="email"
               required
-              className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[#ccc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8c7051] bg-white"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="mail@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Şifre</label>
+            <label className="block text-sm font-medium mb-1">Şifre</label>
             <input
               type="password"
               required
-              className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[#ccc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8c7051] bg-white"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="******"
@@ -63,17 +63,19 @@ export default function RegisterPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            className="w-full bg-[#8c7051] text-white py-2 rounded-lg font-semibold hover:bg-[#745e45] transition"
           >
             Kayıt Ol
           </button>
         </form>
 
-        {error && <p className="mt-3 text-sm text-red-500 text-center">{error}</p>}
+        {error && (
+          <p className="mt-4 text-sm text-red-600 text-center font-medium">{error}</p>
+        )}
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-5 text-center text-sm">
           Zaten hesabın var mı?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-[#8c7051] font-medium hover:underline">
             Giriş Yap
           </Link>
         </p>
