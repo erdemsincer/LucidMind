@@ -33,8 +33,18 @@ builder.Services.AddAuthentication(options =>
             Encoding.UTF8.GetBytes(jwtSettings["Key"]!)
         ),
         NameClaimType = JwtRegisteredClaimNames.Sub
-
     };
+});
+
+// ✅ CORS ayarı - herkese açık
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 // 📦 PostgreSQL
@@ -88,12 +98,13 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
+app.UseCors("AllowAll");     // ✅ CORS middleware aktif
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection(); // Opsiyonel, https kullanılmıyorsa kaldırabilirsin
-app.UseAuthentication();   // 🛡 Auth önce
-app.UseAuthorization();    // 🔐 Sonra yetkilendirme
+app.UseHttpsRedirection();
+app.UseAuthentication();     // 🛡 Auth middleware
+app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
