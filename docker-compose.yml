@@ -30,5 +30,19 @@ services:
       - JwtSettings__Issuer=LucidMind.Auth
       - JwtSettings__Audience=LucidMind.Users
 
+  aiservice-api:
+    build:
+      context: .
+      dockerfile: services/AiService/Dockerfile
+    container_name: aiservice-api
+    ports:
+      - "5002:8080"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+
+
 volumes:
   auth_pgdata:
