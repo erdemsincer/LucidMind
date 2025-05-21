@@ -43,6 +43,36 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - OpenAI__ApiKey=${OPENAI_API_KEY}
 
+  dream-db:
+    image: postgres:15
+    container_name: dream-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: dreamdb
+    ports:
+      - "5434:5432"  
+    volumes:
+      - dream_pgdata:/var/lib/postgresql/data
+
+  dreamservice-api:
+    build:
+      context: .
+      dockerfile: services/DreamService/Dockerfile
+    container_name: dreamservice-api
+    depends_on:
+      - dream-db
+    ports:
+      - "5003:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=dream-db;Port=5432;Database=dreamdb;Username=admin;Password=admin123
+      - JwtSettings__Key=lucidmind-super-secret-key-123456789
+      - JwtSettings__Issuer=LucidMind.Auth
+      - JwtSettings__Audience=LucidMind.Users
+
 
 volumes:
   auth_pgdata:
+  dream_pgdata:
